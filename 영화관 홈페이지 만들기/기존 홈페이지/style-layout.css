@@ -1,0 +1,62 @@
+/* style-layout.css */
+body { margin: 0; padding: 0; line-height: 1.2em; font-size: 0.75em; line-height: 1.2em; }
+hr { clear: both; }
+nav { 
+	list-style:none;
+	margin: 0; 
+	padding:0; 
+	text-align:center;  } 
+nav ul li {
+	display:inline;
+	margin:15px;
+	}
+nav a { display: inline-block;
+	padding:10px;}
+.wrap { margin: 0; margin-right: auto; margin-left: auto; }
+.left { float: left; }
+.right { float: right; padding:30px 10px; }
+.clear { clear: both; }
+
+article { float:left; } 
+
+fieldset span { margin: 7px;}
+
+footer { position:relative; top:100px}
+footer #copyright { margin: 20px 0 0 10px; float: left; }
+footer #SNS { margin: 10px 20px 0 0; float: right; }
+
+body p {margin : 20px 0 20px 0;}
+article p { margin : 20px 0 20px 0; }
+h3 {margin :30px;}
+#logo { float: left; margin: 30px; }
+#login{ margin: 30px; }
+#login fieldset span { display: inline-block; }
+#vote { margin: 30px; }
+#find { margin: 30px; }
+
+#reserve select {margin:2px;}
+#reserve { margin:30px; }
+
+
+#sign_up { margin: 30px; }
+#sign_up fieldset span { display: inline-block; vertical-align: middle; }
+#sign_up fieldset input { vertical-align: middle; }
+
+
+#intro_cinema,#intro_movie{margin : 0 30px 50px 30px; float:left;}
+#intro_movie_text {margin:55px 0 30px 30px ; }
+#intro_movie_title1,#intro_movie_title2,#intro_movie_title3,#intro_movie_title4 {margin: 50px 0 5px 30px ;}
+
+#entrance_fee_table {margin:30px;}
+
+#reservation_table {margin-left:30px;}
+#reservation_details {margin:30px; }
+#reservation_details th {padding:5px;}
+#reservation_details td {padding-top:30px; padding-left:10px;}
+
+#seat_choice_table td { text-align:center; }
+#screen {text-align:center; margin:1.5px; margin-bottom:50px;}
+
+#cancel_button { margin-left:20px;}
+#detail_button {margin:1px; padding:3px;}
+.info_list{ line-height:200%; }

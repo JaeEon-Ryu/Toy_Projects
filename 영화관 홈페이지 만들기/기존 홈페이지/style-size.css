@@ -1,0 +1,46 @@
+/* style-size.css */
+
+header { height: 80px; padding: 20px; }
+nav a { font-size:15px;}
+footer { height: 100px; }
+
+article img { width: 15%; height: auto; }
+article p {font-size:17px; height:25px; padding-top:11px;}
+
+.iframe_size_up { display: block; border: none;  width: 50vw; height: 350px;}
+footer img {height:32px;}
+
+#login fieldset span { width: 80px; }
+#sign_up fieldset span { width: 90px; }
+
+#find_info_by_email {width: 30%;}
+
+#logo { font-size: 40px; }
+#login_button,#new_sign_up,#Initialization,#vote_button,#inquire_button,#find_button {width:100%}
+#intro_cinema {width:800px; font-size:14px;}
+#intro_movie {width:auto; height:350px; }
+#intro_movie_text {width:100%; font-size:14px}
+#intro_movie_title1,#intro_movie_title2,#intro_movie_title3,#intro_movie_title4 {font-size:15px;}
+
+#bk_image{background-size:100% 120px;}
+
+
+#reserve select { height:30px;}
+#reserve_button { width:100%; }
+
+#movie_input { width : 80%; }
+#inquire { width:100%; height:250px; }
+
+#entrance_fee_table { width:92%}
+#reservation_details { width:92%;}
+
+#reserve fieldset input,#reserve fieldset select {width:200px;}
+#reservation_table {width:90%;}
+#seat_choice_table td { width:35px; height:35px; }
+
+#screen {width:323px; height:20px;}
+
+#cancel_button {font-size:10px;}
+#detail_button {font-size:12px;}
+
+.info_list {font-size:13px;}

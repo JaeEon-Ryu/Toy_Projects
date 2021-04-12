@@ -1,0 +1,180 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>Musical Cinema</title>
+	<meta authors="유재언">
+	<link rel = "stylesheet" type="text/css" href="style-size.css"/>
+	<link rel = "stylesheet" type="text/css" href="style-layout.css"/>
+	<link rel = "stylesheet" type="text/css" href="style-presentation.css"/>
+</head>
+
+<body>
+	<header id=bk_image>
+		<a id="logo" href="main.html"> Musical Cinema</a>
+		<span class="right" >
+			<a id="login_pager" href="login.html" target="_self">로그인 |</a>
+			<a id="sign_up_pager" href="sign_up.html" target="_self">회원가입</a>
+		</span>
+	</header>
+	<nav>
+		<ul>
+			<li><a href="cinema_introduction.html" target="_self">극장소개</a></li>
+			<li><a href="movie_introduction.html" target="_self">영화소개</a></li>
+			<li><a href="reservation.html" target="_self">영화예매</a></li>
+			<li><a href="reservation_check.html" target="_self">예매확인</a></li>
+			<li><a href="vote_movie.html" target="_self">상영투표</a></li>
+			<li><a href="help.html" target="_self">고객센터</a></li>
+		</ul>
+	</nav>
+	<hr/>
+	
+	<script type="text/javascript">
+		
+		var localStroage = window.localStorage;
+		if(!localStroage){
+			alert("로컬스토리지를 지원하지 않습니다.");
+		}
+		
+		function search_from_index(list,num){
+			point = 0;
+			idx = 0;
+			while(point != num){	// find start point
+				if(list[idx]==','){
+					point+=1;
+				}
+				idx+=1;
+			}
+			start_index = idx;
+			while(point != num+1){	// find end point
+				if(list[idx]==','){
+					point+=1;
+				}
+				idx+=1;
+			}
+			end_index = idx-1;
+			return list.slice(start_index,end_index);
+		}
+		
+		function cancellation(index){
+			var keyName = key_list[index];
+			var confirmflag = confirm(
+					"예매를 취소하시겠습니까?" +
+					"\n확인 버튼을 누르시면 취소됩니다.");
+				if(confirmflag){
+					alert('예매가 취소되었습니다.');
+					localStorage.removeItem(keyName);
+					window.location.reload();
+				}
+				else{
+					alert("예매가 취소되었습니다");
+				}
+		}
+		
+		function check_details(index){
+			
+			var info = document.getElementById("detail" + index);
+			var d_button = document.getElementById(detail_button);
+		
+			if (info.style.display == "block" ||
+				info.style.display == " " ){
+				info.style.display = "none";
+            }
+            else{
+				info.style.display = "block";
+            }
+			
+		}
+	</script>
+	<h3>예매내역 </h3>
+	
+	<script type="text/javascript">
+		//alert(localStorage.key(0));
+		
+		document.write("<table id='reservation_details'>");
+		document.write("<th>&nbsp관람권명</th>");
+		document.write("<th>&nbsp날짜</th>");
+		document.write("<th>&nbsp사용상태</th>");
+		document.write("<th>&nbsp상세예매내역</th>");
+		
+		var key_list = new Array();
+		for (row=0; row<localStorage.length; row++){
+			key_list.push(localStorage.key(row));
+		}
+		key_list.sort();
+		
+		for (row=0; row<localStorage.length; row++){
+			
+			var keyName = key_list[row];
+			var value_list = localStorage.getItem(keyName);
+			
+			//alert(row + "   " + localStorage.key(row));
+			var date = search_from_index(value_list,2);
+			var movie_name = search_from_index(value_list,1);
+		
+			document.write("<tr>");
+			document.write("<td>"+movie_name+"</td>");
+			document.write("<td>"+date+"</td>");
+			document.write("<td>"+"사용가능"+
+			"<input id='cancel_button' type='button' value='예매취소' onclick='cancellation("+row+")'/>" + "</td>");
+			document.write("<td>"+"<input id='detail_button' type='button' value='자세히' onclick='check_details("+row+")'/>"+"</td>");
+			document.write("</tr>");
+			
+			
+			//alert(value_list);
+			var age_group = search_from_index(value_list,0);
+			var time = search_from_index(value_list,3);
+			var people_count = search_from_index(value_list,4);
+			var amount = search_from_index(value_list,5);
+			//alert(age_group);
+			
+			//좌석 starting point 찾기
+			var start_point = 0;
+			repeat_until_five = 0;
+			while(repeat_until_five != 6){
+				if(value_list[start_point] == ','){
+					repeat_until_five += 1;
+				}
+				start_point += 1;
+			}
+			var seat_number = value_list.slice(start_point,value_list.length);
+			
+			var detail_info = "detail" + row;
+			document.write("<tr>");
+			document.write("<td colspan='3'>" + 
+				"<div class='info_list' id='detail"+row+"'>" + 
+					"연령  : " + age_group + "<br>" +
+					"영화  : " + movie_name + "<br>" +
+					"날짜  : " + date +  "<br>" +
+					"시간  : " + time + "<br>" +
+					"인원  : " + people_count + "명"+ "<br>" +
+					"좌석  : " + seat_number + "<br><br>" +
+					"총 가격 : " + amount +
+				"</div></td>");
+			
+			document.write("</tr>");
+			
+		}
+		
+		document.write("</table>");
+		
+	
+	</script>
+	
+	
+	
+	<footer> 
+		<div id="copyright"> Copyright (c) 2020 Musical Cinema Inc. All rights reserved </div>
+		<div id="SNS">
+			<a href="http://facebook.com" target="_blank">
+			<img src="images/facebook_icon.jpeg" height="32" alt="Facebook"> </a>
+			<a href="http://twitter.com" target="_blank">
+			<img src="images/twitter_icon.jpg" height="32" alt="Twitter"> </a>
+			<a href="http://plus.google.com" target="_blank">
+			<img src="images/google_plus_icon.jpg" height="32" alt="Google Plus"> </a>
+		</div>
+	</footer>
+</body>
+
+
+</html>

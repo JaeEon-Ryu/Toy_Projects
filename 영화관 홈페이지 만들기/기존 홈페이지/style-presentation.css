@@ -1,0 +1,45 @@
+
+article { 
+	text-align:center;
+	margin: 30px; 
+	font-family: Verdana, Geneva, sans-serif; 
+	font-weight: bold;} 
+article img { margin: 0 30px 0 30px ;}
+footer #copyright { margin: 20px 0 0 10px; float: left; }
+footer #SNS { margin: 10px 20px 0 0; float: right; }
+a { text-decoration: none; }
+nav a { text-decoration: none; color: #000000; font-weight:bold;}
+
+nav a:hover { font-size:15px; }
+
+article p {background-image: url(images/banner.jpg); background-repeat: no-repeat;
+background-position: 0 0; background-size:100% auto; color:white;}
+
+#intro_movie_title1,#intro_movie_title2,#intro_movie_title3,#intro_movie_title4{font-weight:bold;}
+#logo,#login_pager, #sign_up_pager { color: white; text-decoration: none;}
+#login a {text-decoration:none; float:right; margin:7px;}
+#bk_image {  background-image: url(images/banner.jpg); 
+	background-repeat: no-repeat;
+	background-position: 0 0;  
+	}
+#login_button,#new_sign_up,#Initialization,#vote_button,#inquire_button,#reserve_button,#find_button {margin:2px;}
+#intro_cinema,#intro_movie_text {line-height:200%; }
+#reserve p {font-weight:bold;}
+#inqure {text-align:left;}
+
+#entrance_fee_table { text-align:center; border:1px solid; height:30px;}
+#entrance_fee_table th { text-align:center; border:1px solid; height:30px;}
+#entrance_fee_table td { text-align:center; border:1px solid; height:30px;}
+
+#seat_choice_table td { border:1px solid; border-spacing:15px;}
+#screen { border : 1px solid; }
+
+#reservation_details th {
+	height:30px; 
+	border-top:3px solid;
+	border-bottom:3px solid;
+	text-align:left;
+}
+
+#reservation_details {border-spacing:0px; } 
+.info_list {padding-bottom:15px; display:none;}

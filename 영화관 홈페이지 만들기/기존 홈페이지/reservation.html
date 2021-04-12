@@ -1,0 +1,362 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>Musical Cinema</title>
+	<meta authors="유재언">
+	<link rel = "stylesheet" type="text/css" href="style-size.css"/>
+	<link rel = "stylesheet" type="text/css" href="style-layout.css"/>
+	<link rel = "stylesheet" type="text/css" href="style-presentation.css"/>
+</head>
+
+<body onload="pageload();">
+	<header id=bk_image>
+		<a id="logo" href="main.html"> Musical Cinema</a>
+		<span class="right" >
+			<a id="login_pager" href="login.html" target="_self">로그인 |</a>
+			<a id="sign_up_pager" href="sign_up.html" target="_self">회원가입</a>
+		</span>
+	</header>
+	<nav>
+		<ul>
+			<li><a href="cinema_introduction.html" target="_self">극장소개</a></li>
+			<li><a href="movie_introduction.html" target="_self">영화소개</a></li>
+			<li><a href="reservation.html" target="_self">영화예매</a></li>
+			<li><a href="reservation_check.html" target="_self">예매확인</a></li>
+			<li><a href="vote_movie.html" target="_self">상영투표</a></li>
+			<li><a href="help.html" target="_self">고객센터</a></li>
+		</ul>
+	</nav>
+	<hr/>
+	
+	<h3>영화요금 </h3>
+	<table id="entrance_fee_table">
+		<thead>
+			<tr>
+				<th>구분</th> 
+				<th>성인</th>
+				<th>청소년</th>
+				<th>시니어</th>
+				<th>장애인</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<th>일반</th>
+				<td>12,000원</td>
+				<td>10,000원</td>
+				<td>8,000원</td>
+				<td>6,000원</td>
+			</tr>
+		</tbody>
+	</table>
+	
+	
+	<h3>영화예매 </h3>
+	<form id=reserve>
+		<fieldset>
+			<br/>
+			<table id = "reservation_table">
+				<td width="300px">
+					<p>00. 연령대 선택</p>
+					<select id="age_group" size="1">
+						<option value="12000" >성인</option>
+						<option value="10000" >청소년 (20세 미만)</option>
+						<option value="8000" >시니어 (50세 이상)</option>
+						<option value="6000" >장애인</option>
+					</select><br/>
+					<p>01. 영화 선택</p>
+					<select id="movie_choice" size="1" onchange="view_seat()">
+						<option value="맘마미아!2" >맘마미아!2</option>
+						<option value="레미제라블" >레미제라블</option>
+						<option value="위대한쇼맨" >위대한쇼맨</option>
+						<option value="드림걸즈" >드림걸즈</option>
+					</select><br/>
+					<p>02. 날짜 선택</p>
+					<input id="movie_date" type="date" onchange="view_seat()"/><br/>
+					<p>03. 시간 선택</p>
+					<select id="movie_time" size="1" onchange="view_seat()">
+						<option value="12:40 ~ 14:40" >12:40 ~ 14:40</option>
+						<option value="15:00 ~ 17:00" >15:00 ~ 17:00</option>
+						<option value="17:20 ~ 19:20" >17:20 ~ 19:20</option>
+					</select>
+					<p>04. 인원 선택</p>
+					<select id="visitor" size="1">
+						<option value="1" selected>1명</option>
+						<option value="2" >2명</option>
+						<option value="3" >3명</option>
+						<option value="4" >4명</option>
+						<option value="5" >5명</option>
+						<option value="6" >6명</option>
+						<option value="7" >7명</option>
+						<option value="8" >8명</option>
+						<option value="9" >9명</option>
+						<option value="10" >10명</option>
+					</select>
+					<br><br><br><br><br>
+				</td>
+				<td width="300px">
+					<p>05. 좌석선택</p>
+					<div id='screen'>스크린</div>
+					<table id='seat_choice_table'>
+						<script type="text/javascript">
+							var alphaList = new Array("A","B","C","D","E","F","G","H");
+							for (row=0; row<8; row++){
+								document.write("<tr>");
+								for (col=0; col<8; col++){
+									document.write(
+										"<td onclick='apply("+row+","+col+")'>"+  
+										alphaList[row] + "-" + col + "</td>"
+									);
+								}
+								document.write("</tr>");
+							}
+						</script>
+					</table>
+					<br><br><br>
+				</td>
+				
+			</table>
+		</fieldset><br/>
+		<input id="reserve_button" type="submit" value="예매하기" onclick="reserve_movie()"/><br/>
+		<input id="Initialization" type="reset" value="초기화" />
+	</form>
+	
+	
+	<script type="text/javascript">
+			
+		s_table = document.getElementById("seat_choice_table");	
+			
+		age = document.getElementById("age_group");
+		movie = document.getElementById("movie_choice");
+		time = document.getElementById("movie_time");
+		count = document.getElementById("visitor");
+		reserved_seat = new Array();
+		unique_list = new Array();
+		info_list = new Array();
+		
+		today = new Date();
+		
+		//웹스토리지 사용
+		var localStroage = window.localStorage;
+		if(!localStroage){
+			alert("로컬스토리지를 지원하지 않습니다.");
+		}
+		
+		function SaveItem(num){
+			localStorage.setItem(num,reserved_info);
+			//alert(localStorage.key(0));
+			window.location.reload();
+		}
+		
+		function ClearAll(){
+			localStorage.clear();
+			window.location.reload();
+		}
+		
+		function pageload(){
+			for(var i=0; i<localStroage.length; i++){
+				unique_list.push(localStorage.key(i));
+				info_list.push(localStorage.getItem(unique_list[i]));
+			}
+		}
+		
+		function search_from_index(list,num){
+			point = 0;
+			idx = 0;
+			while(point != num){	// find start point
+				if(list[idx]==','){
+					point+=1;
+				}
+				idx+=1;
+			}
+			start_index = idx;
+			while(point != num+1){	// find end point
+				if(list[idx]==','){
+					point+=1;
+				}
+				idx+=1;
+			}
+			end_index = idx-1;
+			return list.slice(start_index,end_index);
+		}
+		
+		function view_seat(){
+			//alert('view창에 들어옴');
+			var date = (document.getElementById("movie_date"));
+			var date = new Date(date.value);
+			var date = date.toLocaleDateString();
+			
+			//테이블 배경색 초기화
+			for(row=0; row<8; row++){
+				for(column=0; column<8; column++){
+					tr = s_table.getElementsByTagName("tr")[row];
+					td = tr.getElementsByTagName("td");
+					td[column].style.backgroundColor = "#ffffff"; // 배경:흰색
+				}
+			}
+			
+			//alert(unique_list[0]);
+			//alert(info_list[0]);
+			
+			for(i=0; i<unique_list.length; i++){
+				if( movie.value == search_from_index(info_list[i],1) &&
+					date == search_from_index(info_list[i],2) &&
+					time.value == search_from_index(info_list[i],3)){
+					//alert(unique_list[i].slice(27,unique_list[i].length));
+					//alert(unique_list[i].length);
+					
+					//좌석 starting point 찾기
+					var start_point = 0;
+					repeat_until_five = 0;
+					while(repeat_until_five != 6){
+						if(info_list[i][start_point] == ','){
+							repeat_until_five += 1;
+						}
+						start_point += 1;
+					}
+					//alert(start_point);
+					//alert(info_list[i][start_point]);
+					
+					while(start_point<info_list[i].length){
+						var ATN = alphaList.indexOf(info_list[i][start_point]); // Alpha To Number
+						//alert("ATN = " +ATN);
+						tr = s_table.getElementsByTagName("tr")[ATN];
+						td = tr.getElementsByTagName("td");
+						start_point+=2;
+						var WN = info_list[i][start_point];
+						//alert("WN = " + WN);
+						td[WN].style.backgroundColor = "#808080"; // 배경:회색
+						start_point+=2;
+						//alert('반복문들어옴');
+					}
+					
+				}
+			}
+		
+		}
+		
+		
+		
+		// 좌선 선택 활성화 함수
+		function apply(row,col){
+			
+			var date = (document.getElementById("movie_date"));
+			var date = new Date(date.value);
+			var date = date.toLocaleDateString();
+			
+			tr = s_table.getElementsByTagName("tr")[row];
+			td = tr.getElementsByTagName("td");
+						
+			// 흰색으로 바꾸기 ( 예약취소 )
+			// 회색 #808080 , (128, 128, 128)
+			// 남색 #090969 , (9, 9, 105)
+			if(td[col].style.backgroundColor == "#808080" ||
+				td[col].style.backgroundColor == "rgb(128, 128, 128)"){
+				alert("이미 예약된 자리입니다.");
+			}
+			else if(date === "Invalid Date"){
+				alert("먼저 날짜를 선택해주세요.");
+			}
+			else if (td[col].style.backgroundColor == "#090969" ||
+				td[col].style.backgroundColor == "rgb(9, 9, 105)"){
+				td[col].style.backgroundColor = "#ffffff"; // 배경:흰색
+				td[col].style.color = "#000000"; // 글자:검은색
+				// 예약 정보 배열에 담겨있다면 삭제
+				idx = reserved_seat.indexOf(alphaList[row]+"-"+col);
+				reserved_seat.splice(idx,1);
+			}
+			else{ // 남색으로 바꾸기 ( 예약하기 ) 
+				if(count.value<reserved_seat.length+1){
+					alert("선택하시려면 인원 더 늘려주세요");
+				}
+				else{
+					td[col].style.backgroundColor = "#090969"; // 배경:남색
+					td[col].style.color = "#ffffff";	// 글자:흰색
+					// 예약 정보 배열에 저장
+					reserved_seat.push(alphaList[row]+"-"+col);
+				}
+			}
+						
+		}
+		
+		// 예약 정보 저장 함수
+		function reserve_movie(){
+			
+			var date = (document.getElementById("movie_date"));
+			var date = new Date(date.value);
+			var date = date.toLocaleDateString();
+			
+			if(date=="Invalid Date"){
+				alert("날짜를 선택해주세요.");
+			}
+			else if(date<today.toLocaleDateString()){
+				alert("예약은 현재시간 이후로 가능합니다.");
+			}
+			else if(reserved_seat.length!=count.value){
+				alert("좌석을 인원에 맞춰 선택해주세요.");
+			}
+			else{
+				// 연령대 구하기
+				var age_info = ""
+				if(age.value == "12000"){
+					age_info = "성인";
+				}
+				else if(age.value == "10000"){
+					age_info = "청소년";
+				}
+				else if(age.value == "8000"){
+					age_info = "시니어"; 
+				}
+				else{
+					age_info = "장애인";
+				}
+				
+				var amount = parseInt(age.value) * parseInt(count.value);
+				
+				var confirmflag = confirm(
+					"연령 : "    + age_info     +
+					"\n영화 : "  + movie.value  +
+					"\n날짜 : "  + date         +
+					"\n시간 : "  + time.value   +				
+					"\n인원 : "  + count.value  + "명" +
+					"\n좌석 : "  + reserved_seat +
+					"\n총 가격 : "+ amount + "원" +
+					"\n\n확인 버튼을 누르시면 예매가 완료됩니다.");
+			
+				if(confirmflag){
+					alert("예매가 완료되었습니다");
+					var jbRandom = Math.random();
+					document.write( '<p>' + Math.floor( jbRandom * 10 ) + '</p>' );
+					// 현재시간 + 랜덤숫자 8자리를 합친 하나밖에 없는 Key값 제작
+					unique_number = today.toLocaleString()+"@"+Math.floor( jbRandom * 100000000 );
+					reserved_info = new Array();
+					reserved_info = [age_info,movie.value,date,time.value,count.value,amount,reserved_seat];
+					SaveItem(unique_number);
+				}
+				else{
+					
+					alert("예매가 취소되었습니다");
+				}
+			}
+			
+			
+        }
+		
+	</script>
+	
+	<footer> 
+		<div id="copyright"> Copyright (c) 2020 Musical Cinema Inc. All rights reserved </div>
+		<div id="SNS">
+			<a href="http://facebook.com" target="_blank">
+			<img src="images/facebook_icon.jpeg" height="32" alt="Facebook"> </a>
+			<a href="http://twitter.com" target="_blank">
+			<img src="images/twitter_icon.jpg" height="32" alt="Twitter"> </a>
+			<a href="http://plus.google.com" target="_blank">
+			<img src="images/google_plus_icon.jpg" height="32" alt="Google Plus"> </a>
+		</div>
+	</footer>
+</body>
+
+
+</html>
